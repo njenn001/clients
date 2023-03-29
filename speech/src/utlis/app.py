@@ -3,6 +3,8 @@ import tkinter as tk
 
 """ Class imports. """
 from .controller import Controller
+from .analyzer import Analyzer 
+from .status import Status
 
 class App(tk.Tk): 
 
@@ -17,10 +19,15 @@ class App(tk.Tk):
     size : list 
     container : tk.Frame
     controller : tk.Frame
+    analyzer : tk.Frame
         
 
     Methods
     -------
+    configure(): 
+        Configures various parts of the application. 
+    super_config(): 
+        Configures the super class. 
     run(): 
         Runs the application. 
 
@@ -37,9 +44,11 @@ class App(tk.Tk):
         self.size = [] 
         
         self.container = None 
-        self.controller = None 
-        self.viewer = None
 
+        self.status = None 
+        self.controller = None 
+        self.analyzer = None 
+        
     """ Return the apps title. 
     
     @return title : The title
@@ -88,6 +97,22 @@ class App(tk.Tk):
     def set_container(self, container): 
         self.container = container 
 
+    """ Returns the apps status. 
+    
+    @return status : The status
+    @rtype status : utils.Status
+    """
+    def get_status(self): 
+        return self.status 
+    
+    """ Sets the apps status. 
+    
+    @param status : The status 
+    @type status : utils.Status
+    """
+    def set_status(self, status): 
+        self.status = status 
+
     """ Returns the apps controller. 
     
     @return controller : The controller
@@ -96,13 +121,29 @@ class App(tk.Tk):
     def get_controller(self): 
         return self.controller 
     
-    """ Sets the controller. 
+    """ Sets the apps controller. 
     
     @param controller : The controller 
     @type controller : utils.Controller
     """
     def set_controller(self, controller): 
         self.controller = controller 
+
+    """ Returns the apps analyzer. 
+    
+    @return analyzer : The analyzer.
+    @rtype analyzer : utils.Analyzer 
+    """
+    def get_analyzer(self): 
+        return self.analyzer
+    
+    """ Sets the apps analyzer. 
+    
+    @param analyzer : The analyzer.
+    @type analyzer : utils.Analyzer
+    """
+    def set_analyzer(self, analyzer): 
+        self.analyzer = analyzer 
 
     """ Configures the container. 
     
@@ -119,9 +160,6 @@ class App(tk.Tk):
     """
     def super_config(self): 
         
-        geo = str(self.get_size()[0]) + "x" + str(self.get_size()[1]) 
-        super().geometry(geo)
-
         super().title('Speech Data Analyzer')
         super().attributes("-topmost", True)
         super().resizable(width=False, height=False)
@@ -132,12 +170,16 @@ class App(tk.Tk):
     """
     def configure(self):
 
-        self.set_size([400, 200])
         self.super_config()
         self.container_config()
 
+        self.set_status(Status(self))
+
         self.set_controller(Controller(self))
         self.get_controller().configure()
+
+        self.set_analyzer(Analyzer(self))
+        self.get_analyzer().configure()
 
     """ Runs the application. 
     
