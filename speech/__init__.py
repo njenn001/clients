@@ -160,13 +160,9 @@ def background():
 
     print(
 
-        "   The TC Lab API is an application programming interface utilizing the Flask\n"
-        "framework. This open source technology allowed TC technology to react to various\n"
-        "activities occuring on other nodes on the network. The reason for implementing\n"
-        "this as a development server is because of is range of application. Flask APIs\n"
-        "are rather readable, dependable, extendable, and handy teaching tools. Many\n"
-        "instruments and devices on the TC network will communicate through this API using\n"
-        "common HTTP methods. "
+        "     The Client applications are used to provide the server with the necessary\n"
+        "training data for machine learning algorithms. The clients exist through a variety\n"
+        "of open source frameworks such as Tkinter, React, Hadoop, Kafka, & Spark."
     )
 
 """ Describes available utilities and scenarios. 
@@ -182,12 +178,7 @@ def utilities():
 
         "The following utilities will be facilitated through this API.\n"
         "Client applications will be provided seperately.\n"
-        "\n1) Walkie Talkies\n"
-        "2) Online Games\n"
-        "3) Music Library\n"
-        "4) System assistant\n"
-
-
+        "\n1) \n"
     )
 
 """ Runs the menu. 
@@ -235,35 +226,39 @@ def infomode():
 def initParser(): 
     parser = argparse.ArgumentParser(
             formatter_class=argparse.RawDescriptionHelpFormatter,
-            description= logo + 'Cluster Application Programming Interface',
+            description= logo + 'Client initializing mechanism.',
             epilog='For more help, type __init__.py -h')
     
     '''
     Specify different interface modes
     - virtual 
+    - speech
+    -
+    - info
     '''
     mode_group = parser.add_mutually_exclusive_group(required=True)
     
-    # Guest Mode 
+    # Virtual Mode 
     mode_group.add_argument('--v', '--virtual', help='Create virtual structure.',
                             action='store_true')
 
-    # Run Mode 
-    mode_group.add_argument('--r', '--run', help='Run flask server.',
+    # Speech Mode 
+    mode_group.add_argument('--sp', '--speech', help='Run speech analyzers.',
                             action='store_true')
     
     # Info Mode 
     mode_group.add_argument('--i', '--info', help='Show project information.',
                             action='store_true')
     
-  
-    '''
-    
+    # Word identifyer 
     parser.add_argument(
-        '-un', '--username', default=['guest'], type=str, help="Specify user name.", nargs='+')
-    '''
+        '-w', '--words', default=['False'], type=str, help="Indicate the word machine.", nargs='+')
     
-    return parser 
+    # Phonetics identifyer 
+    parser.add_argument(
+        '-ph', '--phonetics', default=['False'], type=str, help="Indicate the phonetics machine.", nargs='+')
+
+    return parser
 
 """ The main sequence. 
 
@@ -277,10 +272,12 @@ def main():
     if args.v:
         scenario = Scenario() 
         scenario.virtual_init() 
-    elif args.r: 
+    elif args.sp and args.words: 
         scenario = Scenario() 
-        scenario.start() 
-        scenario.get_run_thread().start()
+        scenario.start(['words']) 
+    elif args.sp and args.phonetics: 
+        scenario = Scenario() 
+        scenario.start(['phonetics'])
     elif args.i: 
         infomode()
 

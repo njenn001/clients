@@ -1,10 +1,13 @@
-""" Imports. """
+""" Prebuilt imports. """
 from lib2to3.pgen2.pgen import DFAState
 import os 
 import threading
 import time
 
-from backend.server import Server 
+""" Class imports. """
+from backend.server import Server
+import wrds.src.main as wrds
+import phonetics.src.main as phonetics
 
 """ Scenario class. """
 class Scenario(): 
@@ -274,14 +277,23 @@ class Scenario():
     
     @return none 
     """
-    def start(self): 
-        import flaskr
+    def start(self, *args): 
         
+        print('\nStarting')
         try: 
             self.set_server(Server(self))
-            self.set_app(flaskr.create_app().run())
-            self.set_run_thread( threading.Thread(target=self.get_app, args=([])) )
-            self.add_thread(self.get_run_thread())
+            
+            if args[0][0] == 'words': 
+                print('words')
+                self.set_run_thread( threading.Thread(target=wrds.main, args=([])) )
+                self.add_thread(self.get_run_thread())
+                self.get_run_thread().start()
+            elif args[0][0] == 'phonetics': 
+                print('phonetics')
+                self.set_run_thread( threading.Thread(target=phonetics.main, args=([])) )
+                self.add_thread(self.get_run_thread())
+                self.get_run_thread().start()
+
         except Exception as ex: 
             self.throw_exc('app')
 

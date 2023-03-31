@@ -1,5 +1,5 @@
 """ Class imports. """
-from utlis.app import App
+from phonetics.src.obj.app import App  
 
 """ Defines the main function. 
 
